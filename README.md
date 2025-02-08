@@ -1,1 +1,1 @@
-print("hello think tank")
+hello think tank
