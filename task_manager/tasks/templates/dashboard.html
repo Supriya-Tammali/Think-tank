@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Task Manager{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Welcome, {{ request.user.username }}!</h2>
+
+    <!-- Notifications for Overdue & Upcoming Tasks -->
+    {% if overdue_tasks %}
+        <div class="alert alert-danger">⚠️ You have overdue tasks!</div>
+    {% endif %}
+    {% if upcoming_tasks %}
+        <div class="alert alert-warning">⏳ You have tasks due soon!</div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Task Summary Cards -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Completed Tasks</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ completed_tasks }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Pending Tasks</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ pending_tasks }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Task Completion</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ completion_percentage|floatformat:1 }}%</h3>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ completion_percentage }}%;" aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mb-3">
+        <a href="{% url 'add_task' %}" class="btn btn-success">➕ Add Task</a>
+        <a href="{% url 'task_list' %}" class="btn btn-primary">📋 View Tasks</a>
+    </div>
+
+    <!-- Task Completion Pie Chart -->
+    <div class="card mt-3">
+        <div class="card-header bg-dark text-white">
+            <h5>Task Completion Overview</h5>
+        </div>
+        <div class="card-body">
+            {{ pie_chart_html|safe }}
+        </div>
+    </div>
+
+    <!-- Task Trends Chart -->
+    <div class="card mt-3">
+        <div class="card-header bg-dark text-white">
+            <h5>Weekly Task Trends</h5>
+        </div>
+        <div class="card-body">
+            {{ bar_chart_html|safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}
